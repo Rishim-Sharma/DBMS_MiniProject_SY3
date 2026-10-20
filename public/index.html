@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>RenalCare Clinic</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #f3f7f6;
+  --surface: #ffffff;
+  --text: #1b2a2e;
+  --text-muted: #5c6b6e;
+  --border: #dbe5e2;
+  --accent: #14555a;
+  --accent-soft: #e4eeed;
+  --danger: #b3261e;
+  --danger-soft: #f7e6e4;
+  --radius: 6px;
+}
+.theme-doctor { --accent: #4b3f72; --accent-soft: #eae7f3; }
+.theme-chemist { --accent: #a6650b; --accent-soft: #f5ead8; }
+.theme-admin { --accent: #8a2f4b; --accent-soft: #f6e6ec; }
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+h1, h2, h3 { font-family: "Newsreader", Georgia, serif; font-weight: 500; margin: 0 0 4px; color: var(--text); }
+a { color: var(--accent); cursor: pointer; }
+button { font-family: inherit; font-size: 14px; cursor: pointer; }
+button:disabled { opacity: .6; cursor: default; }
+.btn { background: var(--accent); color: #fff; border: none; border-radius: var(--radius); padding: 8px 16px; font-weight: 500; transition: opacity .15s ease; }
+.btn:hover { opacity: .88; }
+.btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); border-radius: var(--radius); padding: 7px 15px; font-weight: 500; }
+.btn-outline:hover { background: var(--accent-soft); }
+.btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); border-radius: var(--radius); padding: 6px 12px; font-size: 13px; }
+.btn-danger:hover { background: var(--danger-soft); }
+.btn-small { padding: 5px 11px; font-size: 13px; }
+input, select, textarea {
+  font-family: inherit; font-size: 14px; padding: 8px 10px;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: #fff; color: var(--text); width: 100%;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.auth-screen { display: flex; min-height: 100vh; }
+.auth-brand { flex: 1.1; background: linear-gradient(160deg, #123f43, #1b6a6f); color: #eef6f5; padding: 64px 56px; display: flex; flex-direction: column; justify-content: space-between; }
+.auth-brand h1 { color: #fff; font-size: 38px; line-height: 1.2; max-width: 420px; }
+.auth-brand p { max-width: 380px; color: #cfe6e3; }
+.auth-role-hint { display: flex; gap: 20px; margin-top: 32px; flex-wrap: wrap; }
+.auth-role-hint div { border-left: 2px solid #4d8b8a; padding-left: 12px; font-size: 13px; color: #cfe6e3; max-width: 200px; }
+.auth-form-side { flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px; background: var(--bg); }
+.auth-card { width: 100%; max-width: 380px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 36px 32px; }
+.auth-card h2 { margin-bottom: 6px; }
+.auth-card .sub { color: var(--text-muted); margin-bottom: 24px; font-size: 14px; }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; }
+.auth-error { background: var(--danger-soft); color: var(--danger); padding: 10px 12px; border-radius: var(--radius); font-size: 13px; margin-bottom: 16px; }
+.auth-switch { margin-top: 18px; font-size: 13px; color: var(--text-muted); text-align: center; }
+.demo-creds { margin-top: 20px; font-size: 12px; color: var(--text-muted); border-top: 1px dashed var(--border); padding-top: 14px; }
+.app-shell { display: flex; min-height: 100vh; }
+.sidebar { width: 230px; background: #10262a; color: #dce8e6; padding: 28px 20px; display: flex; flex-direction: column; flex-shrink: 0; }
+.sidebar .brand { font-family: "Newsreader", serif; font-size: 20px; color: #fff; margin-bottom: 4px; }
+.sidebar .role-tag { font-size: 12px; color: #fff; background: var(--accent); display: inline-block; padding: 2px 9px; border-radius: 20px; margin-bottom: 28px; }
+.sidebar nav { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.sidebar nav button { background: none; border: none; color: #b7cbc8; text-align: left; padding: 9px 10px; border-radius: var(--radius); font-size: 14px; }
+.sidebar nav button:hover { background: rgba(255,255,255,.06); color: #fff; }
+.sidebar nav button.active { background: rgba(255,255,255,.12); color: #fff; }
+.sidebar .logout-btn { color: #e8b4ac; background: none; border: 1px solid rgba(232,180,172,.4); border-radius: var(--radius); padding: 8px 10px; font-size: 13px; }
+.main { flex: 1; padding: 36px 44px; max-width: 1100px; min-width: 0; }
+.main-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+.main-header p { color: var(--text-muted); margin: 4px 0 0; }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 24px; margin-bottom: 28px; overflow-x: auto; }
+.panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.panel-head h3 { font-size: 17px; }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--text-muted); font-weight: 500; font-size: 12.5px; }
+tr:last-child td { border-bottom: none; }
+.empty-row td { color: var(--text-muted); font-style: italic; padding: 16px 10px; }
+.badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 12px; background: var(--accent-soft); color: var(--accent); }
+.badge.dispensed { background: #e1f3e2; color: #1f6b28; }
+.badge.pending { background: #fbecd6; color: #8a5a08; }
+.row-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.inline-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px; padding: 16px; background: var(--accent-soft); border-radius: var(--radius); }
+.inline-form .field { margin-bottom: 0; }
+.inline-form-actions { grid-column: 1 / -1; display: flex; gap: 10px; }
+.note-banner { background: var(--accent-soft); color: var(--accent); border-radius: var(--radius); padding: 10px 14px; font-size: 13px; margin-bottom: 20px; }
+.loading { color: var(--text-muted); padding: 60px; text-align: center; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.req { color: var(--danger); }
+.badge.bad { background: var(--danger-soft); color: var(--danger); }
+.badge.soon { background: #e3eefb; color: #1d4f91; }
+.count { font-family: "IBM Plex Sans", sans-serif; font-size: 12px; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 1px 8px; margin-left: 8px; vertical-align: middle; }
+.panel-tools { display: flex; gap: 10px; align-items: center; }
+.panel-tools .search { width: 210px; padding: 6px 10px; font-size: 13px; }
+th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
+th.sortable:hover { color: var(--text); }
+th .arrow { font-size: 10px; margin-left: 4px; color: var(--accent); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.stat { text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; color: var(--text); transition: border-color .15s ease, transform .15s ease; }
+.stat:not(:disabled):hover { border-color: var(--accent); transform: translateY(-1px); }
+.stat:disabled { cursor: default; opacity: 1; }
+.stat-label { font-size: 12.5px; color: var(--text-muted); }
+.stat-value { font-family: "Newsreader", Georgia, serif; font-size: 30px; line-height: 1.1; color: var(--accent); }
+#toasts { position: fixed; right: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 50; max-width: calc(100vw - 40px); }
+.toast { background: #10262a; color: #fff; padding: 11px 16px; border-radius: 8px; font-size: 14px; box-shadow: 0 6px 20px rgba(0,0,0,.18); animation: toast-in .2s ease; }
+.toast.err { background: var(--danger); }
+.toast.out { opacity: 0; transform: translateY(6px); transition: all .3s ease; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(8px); } }
+.banner { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; }
+.banner .banner-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.banner button { background: none; border: 1px solid currentColor; color: inherit; border-radius: var(--radius); padding: 3px 10px; font-size: 12.5px; }
+.check { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-muted); margin: -4px 0 14px; cursor: pointer; }
+.check input { width: auto; }
+.demo-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.demo-btns button { background: var(--accent-soft); color: var(--accent); border: none; border-radius: 20px; padding: 3px 11px; font-size: 12px; }
+.demo-btns button:hover { filter: brightness(.95); }
+.hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+@media (max-width: 800px) {
+  .panel-tools .search { width: 140px; }
+  .auth-screen { flex-direction: column; }
+  .app-shell { flex-direction: column; }
+  .sidebar { width: 100%; flex-direction: row; align-items: center; padding: 16px 20px; flex-wrap: wrap; gap: 12px; }
+  .sidebar nav { flex-direction: row; flex-wrap: wrap; }
+  .main { padding: 24px; }
+}
+</style>
+</head>
+<body>
+<div id="app"><div class="loading">Loading…</div></div>
+<div id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   RenalCare frontend
+   All data lives in the PostgreSQL database behind /api/*.
+   Every record shown on screen is fetched from the server, and every
+   add / edit / delete is saved there first.
+===================================================================== */
+
+/* ---------------- tiny helpers ---------------- */
+const store = {
+  get: k => { try { return sessionStorage.getItem(k); } catch { return null; } },
+  set: (k, v) => { try { sessionStorage.setItem(k, v); } catch {} },
+  del: k => { try { sessionStorage.removeItem(k); } catch {} }
+};
+// everything that came from the database is escaped before it goes into innerHTML
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function fmtDate(v) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(v || "");
+  return m ? `${+m[3]} ${MONTHS[+m[2] - 1]} ${m[1]}` : (v || "");
+}
+const todayISO = () => new Date(Date.now() - new Date().getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
+
+let token = store.get("rc_token");
+
+const state = {
+  user: null,          // { username, role, ref_id, name }
+  config: { demo: false, signup: true },
+  screen: "login",     // login | signup (only used while logged out)
+  section: null,
+  loading: false,
+  navSeq: 0,
+  data: {},            // rows fetched for the current section
+  form: null,          // { entity, mode, id }
+  formValues: {},
+  formError: null,
+  panels: {},
+  search: {},          // per-table search text
+  sort: {},            // per-table { key, dir }
+  notice: null,        // { type: "ok" | "err", text, sticky?, copy? }
+  busy: false
+};
+
+async function api(path, method = "GET", body) {
+  let res;
+  try {
+    res = await fetch("/api" + path, {
+      method,
+      headers: { "Content-Type": "application/json", ...(token ? { Authorization: "Bearer " + token } : {}) },
+      body: body !== undefined ? JSON.stringify(body) : undefined
+    });
+  } catch {
+    throw new Error("Can't reach the server. Is it running?");
+  }
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401 && token) {
+    resetSession("Your session expired — please log in again.");
+    render();
+    throw new Error(data.error || "Please log in again");
+  }
+  if (!res.ok) throw new Error(data.error || "Something went wrong");
+  return data;
+}
+
+function resetSession(message) {
+  token = null;
+  store.del("rc_token");
+  Object.assign(state, {
+    user: null, screen: "login", section: null, loading: false, data: {}, form: null, formValues: {}, formError: null,
+    search: {}, sort: {}, notice: message ? { type: "err", text: message } : null
+  });
+}
+
+function toast(type, text) {
+  const box = document.getElementById("toasts");
+  if (!box) return;
+  const el = document.createElement("div");
+  el.className = "toast " + type;
+  el.textContent = text;
+  box.appendChild(el);
+  setTimeout(() => { el.classList.add("out"); setTimeout(() => el.remove(), 320); }, type === "err" ? 6000 : 3500);
+}
+
+/* ---------------- data loading per role + section ---------------- */
+const load = async spec => {
+  const keys = Object.keys(spec);
+  const vals = await Promise.all(keys.map(k => api(spec[k])));
+  return Object.fromEntries(keys.map((k, i) => [k, vals[i]]));
+};
+const LOADERS = {
+  patient: {
+    overview:  () => load({ stats: "/stats", consults: "/consults", careplans: "/careplans" }),
+    profile:   () => load({ profile: "/profile" }),
+    consults:  () => load({ consults: "/consults", doctors: "/doctors" }),
+    tests:     () => load({ tests: "/tests" }),
+    results:   () => load({ results: "/results" }),
+    careplans: () => load({ careplans: "/careplans" }),
+    payments:  () => load({ payments: "/payments" })
+  },
+  doctor: {
+    overview:  () => load({ stats: "/stats", consults: "/consults" }),
+    patients:  () => load({ patients: "/patients" }),
+    consults:  () => load({ consults: "/consults", patientOptions: "/patient-options" }),
+    tests:     () => load({ tests: "/tests", patientOptions: "/patient-options" }),
+    results:   () => load({ results: "/results", tests: "/tests" }),
+    careplans: () => load({ careplans: "/careplans", results: "/results" })
+  },
+  chemist: {
+    overview:  () => load({ stats: "/stats", careplans: "/careplans" }),
+    careplans: () => load({ careplans: "/careplans" }),
+    payments:  () => load({ payments: "/payments", careplans: "/careplans", patientOptions: "/patient-options" })
+  },
+  admin: {
+    overview: () => load({ stats: "/stats", patients: "/patients" }),
+    patients: () => load({ patients: "/patients" }),
+    doctors:  () => load({ doctors: "/doctors" }),
+    chemists: () => load({ chemists: "/chemists" })
+  }
+};
+
+async function loadSection() {
+  const loader = (LOADERS[state.user.role] || {})[state.section];
+  try {
+    state.data = loader ? await loader() : {};
+  } catch (err) {
+    state.data = {};
+    if (state.user) state.notice = { type: "err", text: err.message };
+  }
+}
+const D = k => state.data[k] || [];
+
+/* ---------------- generic form field + CRUD panel ---------------- */
+const REQUIRED_KEYS = new Set(["name", "doctor_id", "patient_id", "consult_date", "test_date", "test_type", "test_id",
+  "measured_value", "recommendation", "result_id", "amount", "payment_date"]);
+
+function fieldHtml(f, id, val) {
+  const req = f.required || REQUIRED_KEYS.has(f.key);
+  let input;
+  if (f.type === "select") {
+    input = `<select id="${id}" ${req ? "required" : ""}><option value="" ${val === "" ? "selected" : ""} disabled>Select...</option>` +
+      f.options.map(o => `<option value="${esc(o.value)}" ${String(val) === String(o.value) ? "selected" : ""}>${esc(o.label)}</option>`).join("") +
+      `</select>`;
+  } else if (f.type === "textarea") {
+    input = `<textarea id="${id}" rows="2" ${req ? "required" : ""}>${esc(val)}</textarea>`;
+  } else {
+    const attrs = f.attrs ?? (f.type === "number" ? 'min="0"' : "");
+    input = `<input id="${id}" type="${f.type || "text"}" value="${esc(val)}" ${req ? "required" : ""} ${attrs} ${f.autocomplete ? `autocomplete="${f.autocomplete}"` : ""}>`;
+  }
+  return `<div class="field"><label for="${id}">${esc(f.label)}${req ? ' <span class="req">*</span>' : ""}</label>${input}</div>`;
+}
+
+const activeFields = cfg => cfg.formFields.filter(f => !(f.createOnly && state.form.mode === "edit"));
+
+function sortedRows(cfg) {
+  const rows = (cfg.rows || []).slice();
+  const s = state.sort[cfg.entity];
+  if (!s) return rows;
+  const cmp = (a, b) => {
+    const x = a[s.key], y = b[s.key];
+    if (x == null && y == null) return 0;
+    if (x == null) return 1;
+    if (y == null) return -1;
+    if (typeof x === "number" && typeof y === "number") return x - y;
+    return String(x).localeCompare(String(y), undefined, { numeric: true, sensitivity: "base" });
+  };
+  return rows.sort((a, b) => s.dir * cmp(a, b));
+}
+
+function crudPanel(cfg) {
+  state.panels[cfg.entity] = cfg;
+  const total = (cfg.rows || []).length;
+  const rows = sortedRows(cfg);
+  const showingForm = state.form && state.form.entity === cfg.entity;
+  const hasActions = cfg.onUpdate || cfg.onDelete || cfg.rowActions;
+  const tools = cfg.tools !== false && total > 5;
+  const sort = state.sort[cfg.entity];
+  let html = `<div class="panel" data-panel="${cfg.entity}"><div class="panel-head"><h3>${esc(cfg.title)}<span class="count">${total}</span></h3><div class="panel-tools">`;
+  if (tools) html += `<input type="search" class="search" placeholder="Search…" aria-label="Search ${esc(cfg.title)}" data-action="search" data-entity="${cfg.entity}" value="${esc(state.search[cfg.entity] || "")}">`;
+  if (cfg.onCreate && !showingForm) {
+    html += `<button class="btn btn-small" data-action="open-form" data-entity="${cfg.entity}" data-mode="create">+ Add</button>`;
+  }
+  html += `</div></div>`;
+  if (showingForm) html += renderForm(cfg);
+
+  html += `<table><thead><tr>`;
+  cfg.columns.forEach(c => {
+    if (!c.key || !tools) { html += `<th>${esc(c.label)}</th>`; return; }
+    const on = sort && sort.key === c.key;
+    html += `<th class="sortable" tabindex="0" data-action="sort" data-entity="${cfg.entity}" data-key="${c.key}" aria-sort="${on ? (sort.dir === 1 ? "ascending" : "descending") : "none"}">${esc(c.label)}${on ? `<span class="arrow">${sort.dir === 1 ? "▲" : "▼"}</span>` : ""}</th>`;
+  });
+  if (hasActions) html += `<th></th>`;
+  html += `</tr></thead><tbody>`;
+
+  const span = cfg.columns.length + (hasActions ? 1 : 0);
+  if (rows.length === 0) {
+    html += `<tr class="empty-row"><td colspan="${span}">${esc(cfg.emptyLabel || "Nothing here yet.")}</td></tr>`;
+  } else {
+    rows.forEach(row => {
+      html += `<tr data-row>`;
+      cfg.columns.forEach(c => {
+        const cell = c.render ? c.render(row) : (/_date$/.test(c.key) ? esc(fmtDate(row[c.key])) : esc(row[c.key]));
+        html += `<td>${cell}</td>`;
+      });
+      if (hasActions) {
+        html += `<td><div class="row-actions">`;
+        if (cfg.rowActions) html += cfg.rowActions(row);
+        if (cfg.onUpdate) html += `<button class="btn-outline btn-small" data-action="open-form" data-entity="${cfg.entity}" data-mode="edit" data-id="${row[cfg.idKey]}">Edit</button>`;
+        if (cfg.onDelete) html += `<button class="btn-danger" data-action="delete-item" data-entity="${cfg.entity}" data-id="${row[cfg.idKey]}">Delete</button>`;
+        html += `</div></td>`;
+      }
+      html += `</tr>`;
+    });
+    html += `<tr class="empty-row no-match" hidden><td colspan="${span}">No records match your search.</td></tr>`;
+  }
+  html += `</tbody></table></div>`;
+  return html;
+}
+
+// hide/show rows in place so typing in the search box never loses focus
+function filterPanel(entity) {
+  const panel = document.querySelector(`[data-panel="${entity}"]`);
+  if (!panel) return;
+  const terms = (state.search[entity] || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const rows = panel.querySelectorAll("tbody tr[data-row]");
+  let shown = 0;
+  rows.forEach(tr => {
+    const ok = !terms.length || terms.every(w => tr.textContent.toLowerCase().includes(w));
+    tr.hidden = !ok;
+    if (ok) shown++;
+  });
+  const nm = panel.querySelector(".no-match");
+  if (nm) nm.hidden = !(rows.length && shown === 0);
+}
+
+function toggleSort(entity, key) {
+  const s = state.sort[entity];
+  if (!s || s.key !== key) state.sort[entity] = { key, dir: 1 };
+  else if (s.dir === 1) state.sort[entity] = { key, dir: -1 };
+  else delete state.sort[entity];
+  render();
+}
+
+function renderForm(cfg) {
+  let html = `<form class="inline-form" data-action="crud-submit" data-entity="${cfg.entity}">`;
+  activeFields(cfg).forEach(f => {
+    html += fieldHtml(f, "field-" + f.key, state.formValues[f.key] ?? f.default ?? "");
+  });
+  html += `<div class="inline-form-actions">
+    <button class="btn btn-small" type="submit">${state.form.mode === "edit" ? "Save changes" : "Create"}</button>
+    <button class="btn-outline btn-small" type="button" data-action="close-form">Cancel</button>
+  </div>`;
+  if (state.formError) html += `<div class="auth-error" style="grid-column:1/-1;margin:0">${esc(state.formError)}</div>`;
+  html += `</form>`;
+  return html;
+}
+
+function openForm(entity, mode, id) {
+  state.form = { entity, mode, id };
+  state.formError = null;
+  state.notice = null;
+  if (mode === "edit") {
+    const cfg = state.panels[entity];
+    const row = (cfg.rows || []).find(r => r[cfg.idKey] == id);
+    state.formValues = { ...row };
+  } else {
+    state.formValues = {};
+  }
+  render();
+  const first = document.querySelector(".inline-form input, .inline-form select, .inline-form textarea");
+  if (first) first.focus();
+}
+
+function closeForm() {
+  state.form = null;
+  state.formValues = {};
+  state.formError = null;
+  render();
+}
+
+async function submitForm(entity) {
+  if (state.busy) return;
+  const cfg = state.panels[entity];
+  const values = {};
+  activeFields(cfg).forEach(f => { values[f.key] = document.getElementById("field-" + f.key).value; });
+  state.busy = true;
+  const btn = document.querySelector(".inline-form button[type=submit]");
+  if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
+  try {
+    const result = state.form.mode === "edit" ? await cfg.onUpdate(state.form.id, values) : await cfg.onCreate(values);
+    state.form = null;
+    state.formValues = {};
+    state.formError = null;
+    state.notice = { type: "ok", text: (result && result.notice) || "Saved.", sticky: !!(result && result.sticky), copy: result && result.copy };
+    await loadSection();
+  } catch (err) {
+    state.formError = err.message;
+    state.formValues = values;         // keep what the user typed
+  }
+  state.busy = false;
+  render();
+}
+
+async function deleteItem(entity, id) {
+  const cfg = state.panels[entity];
+  if (!cfg || !cfg.onDelete || !confirm("Delete this record? This can't be undone.")) return;
+  try {
+    await cfg.onDelete(id);
+    state.notice = { type: "ok", text: "Deleted." };
+    await loadSection();
+  } catch (err) {
+    state.notice = { type: "err", text: err.message };
+  }
+  render();
+}
+
+/* ---------------- shared field definitions ---------------- */
+const GENDER_OPTIONS = ["Female", "Male", "Other"].map(v => ({ value: v, label: v }));
+const PATIENT_FIELDS = [
+  { key: "name", label: "Full name" },
+  { key: "age", label: "Age", type: "number", attrs: 'min="0" max="120" step="1"' },
+  { key: "gender", label: "Gender", type: "select", options: GENDER_OPTIONS },
+  { key: "phone_no", label: "Phone", type: "tel" },
+  { key: "email", label: "Email", type: "email" },
+  { key: "address", label: "Address" }
+];
+const CRED_FIELDS = [
+  { key: "username", label: "Login username (blank = auto)", createOnly: true },
+  { key: "password", label: "Temporary password (blank = auto)", createOnly: true }
+];
+const ACCOUNT_META = {
+  patient: {
+    plural: "patients", idKey: "patient_id", title: "All patients", empty: "No patients registered yet.",
+    columns: [{ key: "name", label: "Name" }, { key: "age", label: "Age" }, { key: "gender", label: "Gender" }, { key: "phone_no", label: "Phone" }, { key: "email", label: "Email" }],
+    fields: PATIENT_FIELDS
+  },
+  doctor: {
+    plural: "doctors", idKey: "doctor_id", title: "All doctors", empty: "No doctors added yet.",
+    columns: [{ key: "name", label: "Name" }, { key: "specialization", label: "Specialization" }, { key: "phone_no", label: "Phone" }],
+    fields: [{ key: "name", label: "Full name" }, { key: "specialization", label: "Specialization" }, { key: "phone_no", label: "Phone", type: "tel" }]
+  },
+  chemist: {
+    plural: "chemists", idKey: "chemist_id", title: "All chemists", empty: "No chemists added yet.",
+    columns: [{ key: "name", label: "Name" }, { key: "phone_no", label: "Phone" }],
+    fields: [{ key: "name", label: "Full name" }, { key: "phone_no", label: "Phone", type: "tel" }]
+  }
+};
+
+const credNotice = r => ({
+  notice: r.generated_password
+    ? `Account created. Username: ${r.username} · Temporary password: ${r.generated_password} — shown only once, please note it down.`
+    : `Account created. Username: ${r.username}.`,
+  sticky: true,
+  copy: r.generated_password ? `Username: ${r.username}\nPassword: ${r.generated_password}` : null
+});
+
+// add / edit / (optionally) delete + reset-password panel for patients, doctors or chemists
+function accountPanel(role, { canDelete, canReset }) {
+  const m = ACCOUNT_META[role];
+  return crudPanel({
+    entity: m.plural, title: m.title, idKey: m.idKey, rows: D(m.plural), columns: m.columns,
+    formFields: [...m.fields, ...CRED_FIELDS],
+    onCreate: async v => credNotice(await api("/" + m.plural, "POST", v)),
+    onUpdate: async (id, v) => { await api(`/${m.plural}/${id}`, "PUT", v); },
+    onDelete: canDelete ? id => api(`/${m.plural}/${id}`, "DELETE") : null,
+    rowActions: canReset ? row => `<button class="btn-outline btn-small" data-action="reset-password" data-role="${role}" data-id="${row[m.idKey]}">Reset password</button>` : null,
+    emptyLabel: m.empty
+  });
+}
+
+const opt = (rows, valueKey, labelFn) => rows.map(r => ({ value: r[valueKey], label: labelFn(r) }));
+const badge = (cls, text) => `<span class="badge ${cls}">${esc(text)}</span>`;
+const doneBadge = text => badge(text === "Completed" || text === "Paid" || text === "Dispensed" ? "dispensed" : "pending", text);
+const assessBadge = r => /^normal$/i.test(r.assessment || "") ? badge("dispensed", "Normal") : /^abnormal$/i.test(r.assessment || "") ? badge("bad", "Abnormal") : esc(r.assessment);
+const whenCell = r => esc(fmtDate(r.consult_date)) + " " + (r.consult_date >= todayISO() ? badge("soon", "Upcoming") : "");
+const money = r => "₹" + esc(Number(r.amount).toLocaleString("en-IN"));
+const rupees = n => "₹" + Number(n || 0).toLocaleString("en-IN");
+
+/* ---------------- auth screens ---------------- */
+const DEMO_LOGINS = [["Patient", "rohan", "patient123"], ["Doctor", "drsameer", "doctor123"], ["Chemist", "priya", "chemist123"], ["Admin", "admin", "admin123"]];
+
+function renderLogin() {
+  const n = state.notice;
+  return `
+  <div class="auth-screen">
+    <div class="auth-brand">
+      <div>
+        <h1>One record, four sets of hands.</h1>
+        <p>A single patient chart moves from consultation to urine testing to a care plan to the pharmacy counter — this login decides which part of that chart you can see and act on.</p>
+      </div>
+      <div class="auth-role-hint">
+        <div>Patients track their own visits, results and care plans.</div>
+        <div>Doctors order tests, record results, and write care plans.</div>
+        <div>Chemists dispense against a care plan and log payment.</div>
+        <div>The admin manages doctors, chemists and patient accounts.</div>
+      </div>
+    </div>
+    <div class="auth-form-side">
+      <div class="auth-card">
+        <h2>Log in</h2>
+        <p class="sub">Enter your username and password to continue.</p>
+        <div id="login-error" role="alert">${n ? `<div class="auth-error">${esc(n.text)}</div>` : ""}</div>
+        <form data-action="login">
+          <div class="field"><label for="login-username">Username</label><input id="login-username" required autofocus autocomplete="username" /></div>
+          <div class="field"><label for="login-password">Password</label><input id="login-password" type="password" required autocomplete="current-password" /></div>
+          <label class="check"><input type="checkbox" data-action="toggle-pw"> Show password</label>
+          <button class="btn" type="submit" style="width:100%">Log in</button>
+        </form>
+        ${state.config.signup ? `<div class="auth-switch">New patient? <a data-action="goto-signup" tabindex="0">Create an account</a></div>` : ""}
+        ${state.config.demo ? `<div class="demo-creds">Demo accounts — click one to fill the form:
+          <div class="demo-btns">${DEMO_LOGINS.map(([l, u, p]) => `<button type="button" data-action="fill-demo" data-u="${u}" data-p="${p}">${l}</button>`).join("")}</div>
+        </div>` : ""}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSignup() {
+  return `
+  <div class="auth-screen">
+    <div class="auth-brand">
+      <div>
+        <h1>Set up your account.</h1>
+        <p>Register as a patient to see your visits, results and care plans. Doctors and chemists are added by the clinic admin.</p>
+      </div>
+    </div>
+    <div class="auth-form-side">
+      <div class="auth-card">
+        <h2>Create patient account</h2>
+        <p class="sub">Your details are saved to the clinic's records.</p>
+        <div id="signup-error" role="alert"></div>
+        <form data-action="signup">
+          ${PATIENT_FIELDS.map(f => fieldHtml({ ...f, required: f.key === "name" }, "signup-" + f.key, "")).join("")}
+          ${fieldHtml({ key: "username", label: "Username", required: true, autocomplete: "username", attrs: 'minlength="3" maxlength="40" pattern="[A-Za-z0-9_.\\-]+" title="Letters, numbers, . _ - only"' }, "signup-username", "")}
+          ${fieldHtml({ key: "password", label: "Password (min 6 characters)", type: "password", required: true, autocomplete: "new-password", attrs: 'minlength="6"' }, "signup-password", "")}
+          ${fieldHtml({ key: "password2", label: "Confirm password", type: "password", required: true, autocomplete: "new-password" }, "signup-password2", "")}
+          <label class="check"><input type="checkbox" data-action="toggle-pw"> Show passwords</label>
+          <button class="btn" type="submit" style="width:100%">Create account</button>
+        </form>
+        <div class="auth-switch">Already have an account? <a data-action="goto-login" tabindex="0">Log in</a></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+async function startSession(data) {
+  if (data.token) { token = data.token; store.set("rc_token", token); }
+  state.user = data.user;
+  state.section = "overview";
+  state.search = {}; state.sort = {};
+  state.form = null; state.formValues = {}; state.formError = null; state.notice = null;
+  await loadSection();
+}
+
+function setBusyBtn(form, text) {
+  const btn = form.querySelector("button[type=submit]");
+  if (!btn) return () => {};
+  const old = btn.textContent;
+  btn.disabled = true; btn.textContent = text;
+  return () => { btn.disabled = false; btn.textContent = old; };
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const done = setBusyBtn(e.target, "Logging in…");
+  try {
+    const data = await api("/auth/login", "POST", {
+      username: document.getElementById("login-username").value,
+      password: document.getElementById("login-password").value
+    });
+    await startSession(data);
+    render();
+  } catch (err) {
+    done();
+    const box = document.getElementById("login-error");
+    if (box) box.innerHTML = `<div class="auth-error">${esc(err.message)}</div>`;
+  }
+}
+
+async function handleSignup(e) {
+  e.preventDefault();
+  const v = id => document.getElementById("signup-" + id).value;
+  const box = document.getElementById("signup-error");
+  const showErr = msg => { if (box) box.innerHTML = `<div class="auth-error">${esc(msg)}</div>`; };
+  if (v("password") !== v("password2")) return showErr("The two passwords don't match.");
+  const done = setBusyBtn(e.target, "Creating account…");
+  try {
+    const data = await api("/auth/register", "POST", {
+      name: v("name"), age: v("age"), gender: v("gender"), phone_no: v("phone_no"),
+      email: v("email"), address: v("address"), username: v("username"), password: v("password")
+    });
+    await startSession(data);
+    state.notice = { type: "ok", text: "Account created and saved — welcome to RenalCare!" };
+    render();
+  } catch (err) {
+    done();
+    showErr(err.message);
+  }
+}
+
+function logout() {
+  resetSession();
+  render();
+}
+
+/* ---------------- dashboard shell ---------------- */
+const NAV_OVERVIEW = { key: "overview", label: "Overview" };
+const ACCOUNT_NAV = { key: "account", label: "Account" };
+const NAV = {
+  patient: [
+    NAV_OVERVIEW,
+    { key: "profile", label: "My profile" },
+    { key: "consults", label: "Consultations" },
+    { key: "tests", label: "Urine tests" },
+    { key: "results", label: "Test results" },
+    { key: "careplans", label: "Care plans" },
+    { key: "payments", label: "Payments" },
+    ACCOUNT_NAV
+  ],
+  doctor: [
+    NAV_OVERVIEW,
+    { key: "patients", label: "Patients" },
+    { key: "consults", label: "Consultations" },
+    { key: "tests", label: "Urine tests" },
+    { key: "results", label: "Test results" },
+    { key: "careplans", label: "Care plans" },
+    ACCOUNT_NAV
+  ],
+  chemist: [
+    NAV_OVERVIEW,
+    { key: "careplans", label: "Care plans to dispense" },
+    { key: "payments", label: "Payments" },
+    ACCOUNT_NAV
+  ],
+  admin: [
+    NAV_OVERVIEW,
+    { key: "patients", label: "Patients" },
+    { key: "doctors", label: "Doctors" },
+    { key: "chemists", label: "Chemists" },
+    ACCOUNT_NAV
+  ]
+};
+const ROLE_LABEL = { patient: "Patient", doctor: "Doctor", chemist: "Chemist", admin: "Admin" };
+const THEME_CLASS = { patient: "", doctor: "theme-doctor", chemist: "theme-chemist", admin: "theme-admin" };
+
+// only long-lived messages (e.g. new login details) stay on the page; everything else is a toast
+function renderNotice() {
+  const n = state.notice;
+  if (!n || !n.sticky) return "";
+  return `<div class="${n.type === "err" ? "auth-error" : "note-banner"} banner" role="status"><span>${esc(n.text)}</span>
+    <span class="banner-actions">${n.copy ? `<button type="button" data-action="copy-notice">Copy</button>` : ""}<button type="button" data-action="dismiss-notice">Dismiss</button></span></div>`;
+}
+
+function renderDashboard() {
+  const role = state.user.role;
+  const sidebar = `
+    <aside class="sidebar">
+      <div>
+        <div class="brand">RenalCare</div>
+        <span class="role-tag">${ROLE_LABEL[role]}</span>
+      </div>
+      <nav>
+        ${NAV[role].map(i => `<button class="${state.section === i.key ? "active" : ""}" ${state.section === i.key ? 'aria-current="page"' : ""} data-action="set-section" data-section="${i.key}">${esc(i.label)}</button>`).join("")}
+      </nav>
+      <div style="margin-top:20px">
+        <div style="font-size:13px;color:#9fb8b4;margin-bottom:10px">${esc(state.user.name)}</div>
+        <button class="logout-btn" data-action="logout">Log out</button>
+      </div>
+    </aside>`;
+
+  state.panels = {};
+  const body = state.loading ? `<div class="loading">Loading…</div>`
+             : state.section === "account" ? renderAccount()
+             : state.section === "overview" ? renderOverview()
+             : role === "patient" ? renderPatientSection()
+             : role === "doctor" ? renderDoctorSection()
+             : role === "chemist" ? renderChemistSection()
+             : renderAdminSection();
+
+  return `<div class="app-shell ${THEME_CLASS[role]}">${sidebar}<main class="main">${renderNotice()}${body}</main></div>`;
+}
+
+async function setSection(key) {
+  const seq = ++state.navSeq;
+  state.section = key;
+  state.form = null;
+  state.formError = null;
+  state.notice = null;
+  state.search = {}; state.sort = {};
+  state.loading = true;
+  render();
+  await loadSection();
+  if (seq !== state.navSeq || !state.user) return;   // user clicked elsewhere meanwhile
+  state.loading = false;
+  render();
+  window.scrollTo(0, 0);
+}
+
+function header(title, subtitle) {
+  return `<div class="main-header"><div><h2>${esc(title)}</h2><p>${esc(subtitle)}</p></div></div>`;
+}
+
+/* ---------------- overview (stat cards + what needs attention) ---------------- */
+const statCards = items => `<div class="stats">${items.map(i => `
+  <button class="stat" ${i.to ? `data-action="set-section" data-section="${i.to}"` : "disabled"}>
+    <span class="stat-label">${esc(i.label)}</span>
+    <span class="stat-value">${i.money ? rupees(i.value) : esc(i.value ?? 0)}</span>
+  </button>`).join("")}</div>`;
+
+function renderOverview() {
+  const { role, name } = state.user;
+  const s = state.data.stats || {};
+  const today = todayISO();
+  const greet = (h => h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening")(new Date().getHours());
+  const who = role === "doctor" ? name : name.split(" ")[0];
+  const upcoming = D("consults").filter(c => c.consult_date >= today).sort((a, b) => a.consult_date.localeCompare(b.consult_date)).slice(0, 5);
+  const pendingPlans = D("careplans").filter(c => c.dispensed_status !== "Dispensed");
+
+  if (role === "patient") {
+    return header(`${greet}, ${who}`, "Here's where your care stands today.") + statCards([
+      { label: "Upcoming consultations", value: s.upcoming_consults, to: "consults" },
+      { label: "Tests pending", value: s.pending_tests, to: "tests" },
+      { label: "Care plans awaiting pharmacy", value: s.pending_careplans, to: "careplans" },
+      { label: "Unpaid balance", value: s.unpaid_amount, money: true, to: "payments" }
+    ]) + crudPanel({
+      entity: "ov-consults", title: "Next consultations", idKey: "consult_id", rows: upcoming, tools: false,
+      columns: [{ key: "doctor_name", label: "Doctor" }, { key: "consult_date", label: "Date" }],
+      emptyLabel: "Nothing booked. Use Consultations to request a visit."
+    }) + crudPanel({
+      entity: "ov-plans", title: "Care plans still with the pharmacy", idKey: "careplan_id", rows: pendingPlans.slice(0, 5), tools: false,
+      columns: [{ key: "recommendation", label: "Recommendation" }, { key: "followup_date", label: "Follow-up" }, { key: "dispensed_status", label: "Status", render: r => doneBadge(r.dispensed_status) }],
+      emptyLabel: "All caught up."
+    });
+  }
+
+  if (role === "doctor") {
+    return header(`${greet}, ${who}`, "Your clinic at a glance.") + statCards([
+      { label: "Patients in clinic", value: s.total_patients, to: "patients" },
+      { label: "My upcoming consultations", value: s.upcoming_consults, to: "consults" },
+      { label: "Tests pending", value: s.pending_tests, to: "tests" },
+      { label: "Care plans awaiting pharmacy", value: s.pending_careplans, to: "careplans" }
+    ]) + crudPanel({
+      entity: "ov-consults", title: "Next consultations", idKey: "consult_id", rows: upcoming, tools: false,
+      columns: [{ key: "patient_name", label: "Patient" }, { key: "consult_date", label: "Date" }],
+      emptyLabel: "No upcoming consultations."
+    });
+  }
+
+  if (role === "chemist") {
+    return header(`${greet}, ${who}`, "What needs your attention at the counter.") + statCards([
+      { label: "Care plans to dispense", value: s.pending_careplans, to: "careplans" },
+      { label: "Dispensed", value: s.dispensed_careplans, to: "careplans" },
+      { label: `Unpaid (${s.unpaid_count ?? 0} bills)`, value: s.unpaid_amount, money: true, to: "payments" },
+      { label: "Collected", value: s.paid_amount, money: true, to: "payments" }
+    ]) + crudPanel({
+      entity: "ov-plans", title: "Waiting to be dispensed", idKey: "careplan_id", rows: pendingPlans.slice(0, 8), tools: false,
+      columns: [{ key: "patient_name", label: "Patient" }, { key: "recommendation", label: "Recommendation" }, { key: "followup_date", label: "Follow-up" }],
+      rowActions: row => `<button class="btn-outline btn-small" data-action="toggle-dispense" data-id="${row.careplan_id}">Mark dispensed</button>`,
+      emptyLabel: "Nothing waiting — all care plans are dispensed."
+    });
+  }
+
+  // admin
+  const recent = D("patients").slice().sort((a, b) => b.patient_id - a.patient_id).slice(0, 5);
+  return header(`${greet}, ${who}`, "Clinic overview.") + statCards([
+    { label: "Patients", value: s.patients, to: "patients" },
+    { label: "Doctors", value: s.doctors, to: "doctors" },
+    { label: "Chemists", value: s.chemists, to: "chemists" },
+    { label: "Tests pending", value: s.pending_tests }
+  ]) + crudPanel({
+    entity: "ov-patients", title: "Newest patients", idKey: "patient_id", rows: recent, tools: false,
+    columns: [{ key: "name", label: "Name" }, { key: "age", label: "Age" }, { key: "phone_no", label: "Phone" },
+      { key: "created_at", label: "Registered", render: r => esc(fmtDate(String(r.created_at || "").slice(0, 10))) }],
+    emptyLabel: "No patients yet."
+  });
+}
+
+/* ---------------- account (change password) ---------------- */
+function renderAccount() {
+  return header("Account", "Signed in as " + state.user.username) + `
+  <div class="panel" style="max-width:420px">
+    <div class="panel-head"><h3>Change password</h3></div>
+    <form data-action="change-password">
+      <div class="field"><label for="cp-current">Current password</label><input id="cp-current" type="password" required autocomplete="current-password"></div>
+      <div class="field"><label for="cp-new">New password (min 6 characters)</label><input id="cp-new" type="password" minlength="6" required autocomplete="new-password"></div>
+      <label class="check"><input type="checkbox" data-action="toggle-pw"> Show passwords</label>
+      <button class="btn" type="submit">Update password</button>
+    </form>
+  </div>`;
+}
+
+async function handleChangePassword(e) {
+  e.preventDefault();
+  const form = e.target;
+  const done = setBusyBtn(form, "Updating…");
+  try {
+    await api("/auth/change-password", "POST", {
+      current_password: document.getElementById("cp-current").value,
+      new_password: document.getElementById("cp-new").value
+    });
+    state.notice = { type: "ok", text: "Password updated." };
+    render();
+  } catch (err) {
+    state.notice = { type: "err", text: err.message };
+    done();
+    render();
+  }
+}
+
+async function resetPassword(role, id) {
+  const pw = prompt("Enter a new temporary password (min 6 characters):");
+  if (!pw) return;
+  try {
+    await api("/admin/reset-password", "POST", { role, ref_id: id, new_password: pw });
+    state.notice = { type: "ok", text: "Password reset. Tell the user their new temporary password." };
+  } catch (err) {
+    state.notice = { type: "err", text: err.message };
+  }
+  render();
+}
+
+/* ---------------- patient dashboard ---------------- */
+function renderPatientSection() {
+  const s = state.section;
+
+  if (s === "profile") {
+    return header("My profile", "Keep your contact details current.") + crudPanel({
+      entity: "profile", title: "Profile", idKey: "patient_id", rows: state.data.profile ? [state.data.profile] : [],
+      columns: [...ACCOUNT_META.patient.columns, { key: "address", label: "Address" }],
+      formFields: PATIENT_FIELDS,
+      onUpdate: async (id, v) => { await api("/profile", "PUT", v); }
+    });
+  }
+
+  if (s === "consults") {
+    return header("Consultations", "Request a consultation with a doctor.") + crudPanel({
+      entity: "consults", title: "My consultations", idKey: "consult_id", rows: D("consults"),
+      columns: [{ key: "doctor_name", label: "Doctor" }, { key: "consult_date", label: "Date", render: whenCell }],
+      formFields: [
+        { key: "doctor_id", label: "Doctor", type: "select", options: opt(D("doctors"), "doctor_id", d => `${d.name} — ${d.specialization || "General"}`) },
+        { key: "consult_date", label: "Date", type: "date", attrs: `min="${todayISO()}"` }
+      ],
+      onCreate: v => api("/consults", "POST", v),
+      emptyLabel: "No consultations requested yet."
+    });
+  }
+
+  if (s === "tests") {
+    return header("Urine tests", "Tests are ordered by your doctor.") + crudPanel({
+      entity: "tests", title: "My urine tests", idKey: "test_id", rows: D("tests"),
+      columns: [
+        { key: "test_date", label: "Date" }, { key: "test_time", label: "Time" }, { key: "test_type", label: "Type" },
+        { key: "status", label: "Status", render: r => doneBadge(r.status) }, { key: "doctor_name", label: "Ordered by" }
+      ],
+      emptyLabel: "No tests on record yet."
+    });
+  }
+
+  if (s === "results") {
+    return header("Test results", "Findings from your urine tests.") + crudPanel({
+      entity: "results", title: "My test results", idKey: "result_id", rows: D("results"),
+      columns: [
+        { key: "test_date", label: "Test date" }, { key: "measured_value", label: "Measured value" },
+        { key: "urine_color", label: "Color" }, { key: "assessment", label: "Assessment", render: assessBadge }, { key: "disease", label: "Disease/finding" }
+      ],
+      emptyLabel: "No results recorded yet."
+    });
+  }
+
+  if (s === "careplans") {
+    return header("Care plans", "Recommendations from your doctor and dispensing status.") + crudPanel({
+      entity: "careplans", title: "My care plans", idKey: "careplan_id", rows: D("careplans"),
+      columns: [
+        { key: "recommendation", label: "Recommendation" }, { key: "followup_date", label: "Follow-up date" }, { key: "notes", label: "Notes" },
+        { key: "dispensed_status", label: "Pharmacy status", render: r => doneBadge(r.dispensed_status) }
+      ],
+      emptyLabel: "No care plans yet."
+    });
+  }
+
+  if (s === "payments") {
+    return header("Payments", "Your billing history.") + crudPanel({
+      entity: "payments", title: "My payments", idKey: "payment_id", rows: D("payments"),
+      columns: [
+        { key: "payment_date", label: "Date" }, { key: "amount", label: "Amount", render: money },
+        { key: "status", label: "Status", render: r => doneBadge(r.status) }
+      ],
+      emptyLabel: "No payments on record."
+    });
+  }
+  return "";
+}
+
+/* ---------------- doctor dashboard ---------------- */
+function renderDoctorSection() {
+  const s = state.section;
+  const patientOptions = opt(D("patientOptions"), "patient_id", p => p.name);
+
+  if (s === "patients") {
+    return header("Patients", "Register new patients and keep their details up to date.") +
+      accountPanel("patient", { canDelete: false, canReset: false });
+  }
+
+  if (s === "consults") {
+    return header("Consultations", "Scheduled visits with your patients.") + crudPanel({
+      entity: "consults", title: "My consultations", idKey: "consult_id", rows: D("consults"),
+      columns: [{ key: "patient_name", label: "Patient" }, { key: "consult_date", label: "Date", render: whenCell }],
+      formFields: [
+        { key: "patient_id", label: "Patient", type: "select", options: patientOptions },
+        { key: "consult_date", label: "Date", type: "date" }
+      ],
+      onCreate: v => api("/consults", "POST", v),
+      onDelete: id => api(`/consults/${id}`, "DELETE"),
+      emptyLabel: "No consultations scheduled yet."
+    });
+  }
+
+  if (s === "tests") {
+    return header("Urine tests", "Order and track tests for your patients.") + crudPanel({
+      entity: "tests", title: "Urine tests I've ordered", idKey: "test_id", rows: D("tests"),
+      columns: [
+        { key: "patient_name", label: "Patient" }, { key: "test_date", label: "Date" }, { key: "test_time", label: "Time" },
+        { key: "test_type", label: "Type" }, { key: "status", label: "Status", render: r => doneBadge(r.status) }
+      ],
+      formFields: [
+        { key: "patient_id", label: "Patient", type: "select", options: patientOptions, createOnly: true },
+        { key: "test_date", label: "Date", type: "date" },
+        { key: "test_time", label: "Time", type: "time" },
+        { key: "test_type", label: "Test type" },
+        { key: "status", label: "Status", type: "select", default: "Pending", options: [{ value: "Pending", label: "Pending" }, { value: "Completed", label: "Completed" }] }
+      ],
+      onCreate: v => api("/tests", "POST", v),
+      onUpdate: async (id, v) => { await api(`/tests/${id}`, "PUT", v); },
+      onDelete: id => api(`/tests/${id}`, "DELETE"),
+      emptyLabel: "You haven't ordered any tests yet."
+    });
+  }
+
+  if (s === "results") {
+    return header("Test results", "Record findings against a urine test.") + crudPanel({
+      entity: "results", title: "Test results", idKey: "result_id", rows: D("results"),
+      columns: [
+        { key: "test_id", label: "Test #" }, { key: "patient_name", label: "Patient" }, { key: "measured_value", label: "Measured value" },
+        { key: "urine_color", label: "Color" }, { key: "assessment", label: "Assessment", render: assessBadge }, { key: "disease", label: "Disease/finding" }
+      ],
+      formFields: [
+        { key: "test_id", label: "Urine test", type: "select", createOnly: true, options: opt(D("tests"), "test_id", t => `#${t.test_id} — ${t.patient_name} (${fmtDate(t.test_date)})`) },
+        { key: "measured_value", label: "Measured value" }, { key: "urine_color", label: "Urine color" },
+        { key: "assessment", label: "Assessment (e.g. Normal / Abnormal)", type: "textarea" }, { key: "disease", label: "Disease/finding" }
+      ],
+      onCreate: v => api("/results", "POST", v),
+      onUpdate: async (id, v) => { await api(`/results/${id}`, "PUT", v); },
+      onDelete: id => api(`/results/${id}`, "DELETE"),
+      emptyLabel: "No results recorded yet."
+    });
+  }
+
+  if (s === "careplans") {
+    return header("Care plans", "Recommendations sent through to the pharmacy.") + crudPanel({
+      entity: "careplans", title: "Care plans", idKey: "careplan_id", rows: D("careplans"),
+      columns: [
+        { key: "patient_name", label: "Patient" }, { key: "recommendation", label: "Recommendation" }, { key: "followup_date", label: "Follow-up" },
+        { key: "dispensed_status", label: "Pharmacy status", render: r => doneBadge(r.dispensed_status) }
+      ],
+      formFields: [
+        { key: "result_id", label: "Test result", type: "select", createOnly: true, options: opt(D("results"), "result_id", r => `#${r.result_id} — ${r.patient_name} · test #${r.test_id}`) },
+        { key: "recommendation", label: "Recommendation", type: "textarea" },
+        { key: "followup_date", label: "Follow-up date", type: "date" },
+        { key: "notes", label: "Notes", type: "textarea" }
+      ],
+      onCreate: v => api("/careplans", "POST", v),
+      onUpdate: async (id, v) => { await api(`/careplans/${id}`, "PUT", v); },
+      onDelete: id => api(`/careplans/${id}`, "DELETE"),
+      emptyLabel: "No care plans written yet."
+    });
+  }
+  return "";
+}
+
+/* ---------------- chemist dashboard ---------------- */
+function renderChemistSection() {
+  const s = state.section;
+
+  if (s === "careplans") {
+    return header("Care plans to dispense", "Every recommendation written by a doctor, across all patients.") + crudPanel({
+      entity: "careplans", title: "All care plans", idKey: "careplan_id", rows: D("careplans"),
+      columns: [
+        { key: "patient_name", label: "Patient" }, { key: "recommendation", label: "Recommendation" },
+        { key: "followup_date", label: "Follow-up" }, { key: "notes", label: "Notes" },
+        { key: "dispensed_status", label: "Status", render: r => doneBadge(r.dispensed_status) }
+      ],
+      rowActions: row => `<button class="btn-outline btn-small" data-action="toggle-dispense" data-id="${row.careplan_id}">${row.dispensed_status === "Dispensed" ? "Mark pending" : "Mark dispensed"}</button>`,
+      emptyLabel: "No care plans recorded yet."
+    });
+  }
+
+  if (s === "payments") {
+    return header("Payments", "Log a payment against a patient and, optionally, a care plan.") + crudPanel({
+      entity: "payments", title: "All payments", idKey: "payment_id", rows: D("payments"),
+      columns: [
+        { key: "patient_name", label: "Patient" }, { key: "payment_date", label: "Date" },
+        { key: "amount", label: "Amount", render: money }, { key: "status", label: "Status", render: r => doneBadge(r.status) }
+      ],
+      formFields: [
+        { key: "patient_id", label: "Patient", type: "select", createOnly: true, options: opt(D("patientOptions"), "patient_id", p => p.name) },
+        { key: "careplan_id", label: "Care plan (optional)", type: "select", createOnly: true,
+          options: opt(D("careplans"), "careplan_id", cp => `#${cp.careplan_id} — ${cp.patient_name}: ${(cp.recommendation || "").slice(0, 28)}`) },
+        { key: "amount", label: "Amount (₹)", type: "number", attrs: 'min="1" step="0.01"' },
+        { key: "payment_date", label: "Date", type: "date" },
+        { key: "status", label: "Status", type: "select", default: "Unpaid", options: [{ value: "Paid", label: "Paid" }, { value: "Unpaid", label: "Unpaid" }] }
+      ],
+      onCreate: v => api("/payments", "POST", v),
+      onUpdate: async (id, v) => { await api(`/payments/${id}`, "PUT", v); },
+      onDelete: id => api(`/payments/${id}`, "DELETE"),
+      emptyLabel: "No payments recorded yet."
+    });
+  }
+  return "";
+}
+
+async function toggleDispense(id) {
+  try {
+    await api(`/careplans/${id}/toggle-dispense`, "POST");
+    state.notice = { type: "ok", text: "Care plan status updated." };
+    await loadSection();
+  } catch (err) {
+    state.notice = { type: "err", text: err.message };
+  }
+  render();
+}
+
+/* ---------------- admin dashboard ---------------- */
+function renderAdminSection() {
+  const s = state.section;
+  if (s === "patients") return header("Patients", "Add, edit or remove patient accounts.") + accountPanel("patient", { canDelete: true, canReset: true });
+  if (s === "doctors") return header("Doctors", "Only the admin can add doctors to the clinic.") + accountPanel("doctor", { canDelete: true, canReset: true });
+  if (s === "chemists") return header("Chemists", "Only the admin can add chemists to the clinic.") + accountPanel("chemist", { canDelete: true, canReset: true });
+  return "";
+}
+
+/* ---------------- root render + boot ---------------- */
+function render() {
+  const app = document.getElementById("app");
+  if (!state.user) {
+    app.innerHTML = state.screen === "signup" ? renderSignup() : renderLogin();
+    return;
+  }
+  const n = state.notice;
+  if (n && !n.sticky) { toast(n.type, n.text); state.notice = null; }
+  app.innerHTML = renderDashboard();
+  Object.keys(state.panels).forEach(filterPanel);
+}
+
+/* ---------------- event delegation ---------------- */
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-action]");
+  if (!el) return;
+  const action = el.dataset.action;
+  const id = el.dataset.id !== undefined ? Number(el.dataset.id) : undefined;
+  if (action === "goto-signup") { state.screen = "signup"; state.notice = null; render(); }
+  else if (action === "goto-login") { state.screen = "login"; state.notice = null; render(); }
+  else if (action === "set-section") { setSection(el.dataset.section); }
+  else if (action === "logout") { logout(); }
+  else if (action === "open-form") { openForm(el.dataset.entity, el.dataset.mode, id); }
+  else if (action === "delete-item") { deleteItem(el.dataset.entity, id); }
+  else if (action === "close-form") { closeForm(); }
+  else if (action === "toggle-dispense") { toggleDispense(id); }
+  else if (action === "reset-password") { resetPassword(el.dataset.role, id); }
+  else if (action === "sort") { toggleSort(el.dataset.entity, el.dataset.key); }
+  else if (action === "dismiss-notice") { state.notice = null; render(); }
+  else if (action === "copy-notice") {
+    const text = state.notice && state.notice.copy;
+    if (text && navigator.clipboard) navigator.clipboard.writeText(text).then(() => toast("ok", "Copied to clipboard"), () => toast("err", "Couldn't copy — please select the text instead"));
+  }
+  else if (action === "fill-demo") {
+    document.getElementById("login-username").value = el.dataset.u;
+    document.getElementById("login-password").value = el.dataset.p;
+    document.getElementById("login-password").focus();
+  }
+});
+
+document.addEventListener("input", e => {
+  const el = e.target.closest('[data-action="search"]');
+  if (!el) return;
+  state.search[el.dataset.entity] = el.value;
+  filterPanel(el.dataset.entity);
+});
+
+document.addEventListener("change", e => {
+  const el = e.target.closest('[data-action="toggle-pw"]');
+  if (!el) return;
+  el.closest("form").querySelectorAll('input[type="password"], input[data-pw]').forEach(i => {
+    i.type = el.checked ? "text" : "password";
+    i.dataset.pw = "1";
+  });
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && state.form) { closeForm(); return; }
+  if ((e.key === "Enter" || e.key === " ") && e.target.matches && e.target.matches("th.sortable, a[data-action]")) {
+    e.preventDefault();
+    e.target.click();
+  }
+});
+
+document.addEventListener("submit", e => {
+  const form = e.target.closest("[data-action]");
+  if (!form) return;
+  e.preventDefault();
+  const a = form.dataset.action;
+  if (a === "login") handleLogin(e);
+  else if (a === "signup") handleSignup(e);
+  else if (a === "change-password") handleChangePassword(e);
+  else if (a === "crud-submit") submitForm(form.dataset.entity);
+});
+
+(async function boot() {
+  try { state.config = { ...state.config, ...(await api("/config")) }; } catch { /* keep defaults */ }
+  if (token) {
+    try {
+      const me = await api("/auth/me");
+      await startSession({ user: me.user });
+    } catch (err) {
+      if (token) state.notice = { type: "err", text: err.message };   // a 401 already reset the session with its own message
+    }
+  }
+  render();
+})();
+</script>
+</body>
+</html>
