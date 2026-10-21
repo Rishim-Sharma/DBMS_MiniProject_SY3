@@ -27,7 +27,7 @@ You need **Node.js 18+** and **PostgreSQL** installed and running.
    npm install
    npm start
    ```
-3. Open <http://localhost:3000>
+3. Open <http://localhost:3000> OR <https://renalcare-4gzi.onrender.com/>
 
 On first start the app creates the `renalcare` database (if your PostgreSQL user is allowed to),
 creates the tables from `db/schema.sql`, and adds the admin account plus demo data.
